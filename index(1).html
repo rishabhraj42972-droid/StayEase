@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StayEase - PG, Flat & Tiffin Finder</title>
+    <style>
+        /* कलर पैलेट और बेसिक सेटिंग्स */
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #06b6d4;
+            --flat-color: #f59e0b; /* Flat के लिए नया कलर */
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding-bottom: 60px;
+        }
+
+        /* हेडर और लैंग्वेज बटन */
+        header {
+            background: linear-gradient(135deg, var(--primary-color), #3730a3);
+            color: white;
+            padding: 30px 20px 20px 20px;
+            text-align: center;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            position: relative;
+        }
+
+        .lang-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        header h1 {
+            font-size: 28px;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* सर्च और फ़िल्टर सेक्शन */
+        .search-container {
+            padding: 20px;
+            max-width: 500px;
+            margin: -20px auto 0 auto;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 50px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            font-size: 15px;
+            outline: none;
+            text-align: center;
+        }
+
+        .tab-container {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 5px 0 15px 0;
+            padding: 0 15px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            flex: 1 1 auto;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            background-color: #e2e8f0;
+            color: var(--text-color);
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 6px rgba(79, 70, 229, 0.3);
+        }
+
+        /* लिस्टिंग कार्ड्स */
+        .listings {
+            padding: 15px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-tag {
+            align-self: flex-start;
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: white;
+            border-bottom-right-radius: 10px;
+        }
+
+        .tag-pg { background-color: var(--primary-color); }
+        .tag-tiffin { background-color: var(--secondary-color); }
+        .tag-flat { background-color: var(--flat-color); }
+
+        .card-body { padding: 15px; }
+
+        .card-title {
+            font-size: 18px;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .card-location {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 10px;
+        }
+
+        .card-details {
+            font-size: 14px;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 12px;
+        }
+
+        .price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #10b981;
+        }
+
+        .btn-connect {
+            background-color: #25d366;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* नया डेटा जोड़ने का फॉर्म */
+        .form-section {
+            background-color: #ffffff;
+            margin: 30px auto;
+            padding: 20px;
+            border-radius: 15px;
+            max-width: 450px;
+            width: 90%;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .form-section h3 {
+            margin-bottom: 5px;
+            text-align: center;
+            color: var(--primary-color);
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <button class="lang-btn" id="langBtn" onclick="toggleLanguage()">🌐 हिंदी</button>
+        <h1>StayEase</h1>
+        <p>
+            <span class="lang-en">Rooms, Flats, PGs, and Home-like Tiffin</span>
+            <span class="lang-hi" style="display:none;">रूम, फ्लैट, PG और घर जैसा टिफिन</span>
+        </p>
+    </header>
+
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-bar" placeholder="🔍 Search area or location... (e.g., Koni)">
+    </div>
+
+    <div class="tab-container">
+        <button class="tab-btn active" onclick="filterItems('all', this)">
+            <span class="lang-en">All</span>
+            <span class="lang-hi" style="display:none;">सभी देखें</span>
+        </button>
+        <button class="tab-btn" onclick="filterItems('pg', this)">
+            <span class="lang-en">🏠 PG / Room</span>
+            <span class="lang-hi" style="display:none;">🏠 PG / रूम</span>
+        </button>
+        <button class="tab-btn" onclick="filterItems('flat', this)">
+            <span class="lang-en">🏢 Flat</span>
+            <span class="lang-hi" style="display:none;">🏢 फ्लैट</span>
+        </button>
+        <button class="tab-btn" onclick="filterItems('tiffin', this)">
+            <span class="lang-en">🍱 Tiffin</span>
+            <span class="lang-hi" style="display:none;">🍱 टिफिन</span>
+        </button>
+    </div>
+
+    <div class="listings" id="listingsContainer">
+        
+        <div class="card item-box" data-type="tiffin" data-location="Badi Koni">
+            <span class="card-tag tag-tiffin">
+                <span class="lang-en">🍱 Tiffin Service</span>
+                <span class="lang-hi" style="display:none;">🍱 टिफिन सर्विस</span>
+            </span>
+            <div class="card-body">
+                <div class="card-title">
+                    <span class="lang-en">Anil Tiffin Service</span>
+                    <span class="lang-hi" style="display:none;">अनिल टिफिन सर्विस</span>
+                </div>
+                <div class="card-location">
+                    <span class="lang-en">📍 Badi Koni</span>
+                    <span class="lang-hi" style="display:none;">📍 बड़ी कोनी</span>
+                </div>
+                <div class="card-details">
+                    <span class="lang-en">✔ Veg and Non-veg available.</span>
+                    <span class="lang-hi" style="display:none;">✔ वेज और नॉन-वेज भोजन उपलब्ध।</span>
+                </div>
+                <div class="card-footer">
+                    <div class="price">₹2,300 <span class="lang-en" style="font-size:11px; color:#64748b;">/ month</span><span class="lang-hi" style="font-size:11px; color:#64748b; display:none;">/ महीना</span></div>
+                    <a href="https://wa.me/919202337948?text=Hi StayEase, I want to know about Anil Tiffin Service." target="_blank" class="btn-connect">
+                        <span class="lang-en">💬 Contact</span>
+                        <span class="lang-hi" style="display:none;">💬 संपर्क करें</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card item-box" data-type="tiffin" data-location="Koni">
+            <span class="card-tag tag-tiffin">
+                <span class="lang-en">🍱 Tiffin Service</span>
+                <span class="lang-hi" style="display:none;">🍱 टिफिन सर्विस</span>
+            </span>
+            <div class="card-body">
+                <div class="card-title">
+                    <span class="lang-en">Aarav Tiffin</span>
+                    <span class="lang-hi" style="display:none;">आरव टिफिन</span>
+                </div>
+                <div class="card-location">
+                    <span class="lang-en">📍 Koni</span>
+                    <span class="lang-hi" style="display:none;">📍 कोनी</span>
+                </div>
+                <div class="card-details">
+                    <span class="lang-en">✔ Veg and Non-veg available.</span>
+                    <span class="lang-hi" style="display:none;">✔ वेज और नॉन-वेज भोजन उपलब्ध।</span>
+                </div>
+                <div class="card-footer">
+                    <div class="price">₹2,300 <span class="lang-en" style="font-size:11px; color:#64748b;">/ month</span><span class="lang-hi" style="font-size:11px; color:#64748b; display:none;">/ महीना</span></div>
+                    <a href="https://wa.me/919202337948?text=Hi StayEase, I want to know about Aarav Tiffin." target="_blank" class="btn-connect">
+                        <span class="lang-en">💬 Contact</span>
+                        <span class="lang-hi" style="display:none;">💬 संपर्क करें</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card item-box" data-type="tiffin" data-location="Koni">
+            <span class="card-tag tag-tiffin">
+                <span class="lang-en">🍱 Tiffin Service</span>
+                <span class="lang-hi" style="display:none;">🍱 टिफिन सर्विस</span>
+            </span>
+            <div class="card-body">
+                <div class="card-title">
+                    <span class="lang-en">Tiffin Service</span>
+                    <span class="lang-hi" style="display:none;">टिफिन सर्विस</span>
+                </div>
+                <div class="card-location">
+                    <span class="lang-en">📍 Koni</span>
+                    <span class="lang-hi" style="display:none;">📍 कोनी</span>
+                </div>
+                <div class="card-details">
+                    <span class="lang-en">✔ Veg and Non-veg available.</span>
+                    <span class="lang-hi" style="display:none;">✔ वेज और नॉन-वेज भोजन उपलब्ध।</span>
+                </div>
+                <div class="card-footer">
+                    <div class="price">₹2,400 <span class="lang-en" style="font-size:11px; color:#64748b;">/ month</span><span class="lang-hi" style="font-size:11px; color:#64748b; display:none;">/ महीना</span></div>
+                    <a href="https://wa.me/919202337948?text=Hi StayEase, I want to know about the Tiffin Service in Koni." target="_blank" class="btn-connect">
+                        <span class="lang-en">💬 Contact</span>
+                        <span class="lang-hi" style="display:none;">💬 संपर्क करें</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card item-box" data-type="pg" data-location="Badi Koni">
+            <span class="card-tag tag-pg">
+                <span class="lang-en">🏠 PG & Room</span>
+                <span class="lang-hi" style="display:none;">🏠 PG और रूम</span>
+            </span>
+            <div class="card-body">
+                <div class="card-title">
+                    <span class="lang-en">PG & Room</span>
+                    <span class="lang-hi" style="display:none;">PG और रूम</span>
+                </div>
+                <div class="card-location">
+                    <span class="lang-en">📍 Badi Koni</span>
+                    <span class="lang-hi" style="display:none;">📍 बड़ी कोनी</span>
+                </div>
+                <div class="card-details">
+                    <span class="lang-en">✔ Bed, kitchen, latrine & bathroom facility included.</span>
+                    <span class="lang-hi" style="display:none;">✔ बेड, किचन और बाथरूम सुविधा उपलब्ध है।</span>
+                </div>
+                <div class="card-footer">
+                    <div class="price">₹1,500 <span class="lang-en" style="font-size:11px; color:#64748b;">/ month</span><span class="lang-hi" style="font-size:11px; color:#64748b; display:none;">/ महीना</span></div>
+                    <a href="https://wa.me/919202337948?text=Hi StayEase, I want to know about PG & Room in Badi Koni." target="_blank" class="btn-connect">
+                        <span class="lang-en">💬 Contact</span>
+                        <span class="lang-hi" style="display:none;">💬 संपर्क करें</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="form-section">
+        <h3>
+            <span class="lang-en">List Your PG, Flat or Tiffin</span>
+            <span class="lang-hi" style="display:none;">अपना PG, फ्लैट या टिफिन ऐड करें</span>
+        </h3>
+        <p style="font-size: 12px; text-align: center; color: #64748b; margin-bottom: 15px;">
+            <span class="lang-en">List your business on our app for FREE.</span>
+            <span class="lang-hi" style="display:none;">हमारे ऐप पर अपना विज्ञापन बिल्कुल फ्री में डालें।</span>
+        </p>
+        <form id="addListingForm" onsubmit="handleSubmit(event)">
+            <div class="form-group">
+                <label>
+                    <span class="lang-en">Your Name / Business Name</span>
+                    <span class="lang-hi" style="display:none;">आपका नाम / बिजनेस का नाम</span>
+                </label>
+                <input type="text" id="formName" placeholder="e.g. Raj Tiffin Center" required>
+            </div>
+            
+            <div class="form-group">
+                <label>
+                    <span class="lang-en">Phone Number</span>
+                    <span class="lang-hi" style="display:none;">फ़ोन नंबर (Mobile No.)</span>
+                </label>
+                <input type="tel" id="formPhone" placeholder="e.g. 9876543210" pattern="[0-9]{10}" title="Enter 10 digit mobile number" required>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <span class="lang-en">Select Category</span>
+                    <span class="lang-hi" style="display:none;">कैटेगरी चुनें</span>
+                </label>
+                <select id="formCategory" required>
+                    <option value="PG / Room">PG / Room (PG / रूम)</option>
+                    <option value="Flat">Flat (फ्लैट)</option>
+                    <option value="Tiffin Service">Tiffin Service (टिफिन सर्विस)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>
+                    <span class="lang-en">Location / Area</span>
+                    <span class="lang-hi" style="display:none;">लोकेशन / एरिया</span>
+                </label>
+                <input type="text" id="formLoc" placeholder="e.g. Koni, Bilaspur" required>
+            </div>
+            <div class="form-group">
+                <label>
+                    <span class="lang-en">Monthly Charge (in ₹)</span>
+                    <span class="lang-hi" style="display:none;">महीने का चार्ज (रुपये में)</span>
+                </label>
+                <input type="number" id="formPrice" placeholder="e.g. 2300" required>
+            </div>
+            <div class="form-group">
+                <label>
+                    <span class="lang-en">Facilities / Menu Details</span>
+                    <span class="lang-hi" style="display:none;">सुविधाएं / मेनू की जानकारी</span>
+                </label>
+                <textarea rows="3" id="formDesc" placeholder="Write down the facilities provided..." required></textarea>
+            </div>
+            <button type="submit" class="btn-submit">
+                <span class="lang-en">Submit Details</span>
+                <span class="lang-hi" style="display:none;">डिटेल्स सबमिट करें</span>
+            </button>
+        </form>
+    </div>
+
+    <script>
+        let currentLang = 'en';
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'hi' : 'en';
+            
+            let hiElements = document.querySelectorAll('.lang-hi');
+            let enElements = document.querySelectorAll('.lang-en');
+            let searchInput = document.getElementById('searchInput');
+            let langBtn = document.getElementById('langBtn');
+
+            let formName = document.getElementById('formName');
+            let formPhone = document.getElementById('formPhone');
+            let formLoc = document.getElementById('formLoc');
+            let formPrice = document.getElementById('formPrice');
+            let formDesc = document.getElementById('formDesc');
+
+            if (currentLang === 'hi') {
+                enElements.forEach(el => el.style.display = 'none');
+                hiElements.forEach(el => el.style.display = 'inline');
+                langBtn.innerText = '🌐 English';
+                
+                searchInput.placeholder = '🔍 एरिया या लोकेशन सर्च करें... (उदा. Koni)';
+                formName.placeholder = 'उदा. राज टिफिन सेंटर';
+                formPhone.placeholder = 'उदा. 9876543210';
+                formLoc.placeholder = 'उदा. Koni, Bilaspur';
+                formPrice.placeholder = 'उदा. 2300';
+                formDesc.placeholder = 'क्या-क्या सुविधाएं देंगे, यहाँ लिखें...';
+            } else {
+                hiElements.forEach(el => el.style.display = 'none');
+                enElements.forEach(el => el.style.display = 'inline');
+                langBtn.innerText = '🌐 हिंदी';
+                
+                searchInput.placeholder = '🔍 Search area or location... (e.g., Koni)';
+                formName.placeholder = 'e.g. Raj Tiffin Center';
+                formPhone.placeholder = 'e.g. 9876543210';
+                formLoc.placeholder = 'e.g. Koni, Bilaspur';
+                formPrice.placeholder = 'e.g. 2300';
+                formDesc.placeholder = 'Write down the facilities provided...';
+            }
+        }
+
+        function filterItems(type, clickBtn) {
+            let buttons = document.getElementsByClassName('tab-btn');
+            for (let btn of buttons) { btn.classList.remove('active'); }
+            clickBtn.classList.add('active');
+
+            let cards = document.getElementsByClassName('item-box');
+            for (let card of cards) {
+                if (type === 'all' || card.getAttribute('data-type') === type) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            }
+        }
+
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            let searchValue = this.value.toLowerCase();
+            let cards = document.getElementsByClassName('item-box');
+
+            for (let card of cards) {
+                let location = card.getAttribute('data-location').toLowerCase();
+                let titleHi = card.querySelector('.lang-hi').innerText.toLowerCase();
+                let titleEn = card.querySelector('.lang-en').innerText.toLowerCase();
+                
+                if (location.includes(searchValue) || titleHi.includes(searchValue) || titleEn.includes(searchValue)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            }
+        });
+
+        // WhatsApp Redirect Fix 
+        function handleSubmit(event) {
+            event.preventDefault(); 
+            
+            let name = document.getElementById('formName').value;
+            let phone = document.getElementById('formPhone').value;
+            let category = document.getElementById('formCategory').value;
+            let location = document.getElementById('formLoc').value;
+            let price = document.getElementById('formPrice').value;
+            let desc = document.getElementById('formDesc').value;
+
+            let message = `*StayEase - New Listing Request*\n\n` +
+                          `*Name/Business:* ${name}\n` +
+                          `*Phone Number:* ${phone}\n` +
+                          `*Category:* ${category}\n` +
+                          `*Location:* ${location}\n` +
+                          `*Monthly Price:* ₹${price}\n` +
+                          `*Details:* ${desc}\n\n` +
+                          `Please list this on the app.`;
+
+            let whatsappUrl = `https://wa.me/919202337948?text=${encodeURIComponent(message)}`;
+
+            window.location.href = whatsappUrl;
+
+            document.getElementById('addListingForm').reset();
+        }
+    </script>
+</body>
+</html>
